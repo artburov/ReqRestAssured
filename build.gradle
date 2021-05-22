@@ -1,0 +1,43 @@
+plugins {
+    id "java-library"
+}
+
+def
+        assertjVersion = "3.19.0",
+        selenideVersion = "5.20.4",
+        junitVersion = "5.7.1",
+        slf4jVersion = "1.7.30",
+        restAssuredVersion = "4.3.1"
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation(
+            "com.codeborne:selenide:$selenideVersion",
+            "org.junit.jupiter:junit-jupiter-api:$junitVersion",
+            "org.slf4j:slf4j-log4j12:$slf4jVersion",
+            "org.assertj:assertj-core:$assertjVersion",
+            "io.rest-assured:rest-assured:$restAssuredVersion")
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.withType(Test) {
+    systemProperties(System.getProperties())
+    useJUnitPlatform()
+
+    testLogging {
+        lifecycle {
+            events "started", "skipped", "failed", "standard_error", "standard_out"
+            exceptionFormat "short"
+        }
+    }
+}
